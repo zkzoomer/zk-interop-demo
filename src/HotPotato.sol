@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.28;
 
-import {L2_TO_L1_MESSENGER_SYSTEM_CONTRACT, L2_MESSAGE_VERIFICATION} from "era-contracts/contracts/common/l2-helpers/L2ContractAddresses.sol";
+import {
+    L2_TO_L1_MESSENGER_SYSTEM_CONTRACT,
+    L2_MESSAGE_VERIFICATION
+} from "era-contracts/contracts/common/l2-helpers/L2ContractAddresses.sol";
 import {L2Message} from "era-contracts/contracts/common/Messaging.sol";
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
@@ -36,21 +39,12 @@ contract HotPotato is IHotPotato, ERC721, Ownable {
 
     /// @inheritdoc IHotPotato
     function mintPotato() external returns (uint256 potatoId) {
-        potatoId = PotatoLib.getPotatoId(
-            block.chainid,
-            ++potatoCount,
-            block.chainid,
-            0,
-            initialTimebomb
-        );
+        potatoId = PotatoLib.getPotatoId(block.chainid, ++potatoCount, block.chainid, 0, initialTimebomb);
         _mint(msg.sender, potatoId);
     }
 
     /// @inheritdoc IHotPotato
-    function burnAndThrowPotato(
-        uint256 potatoId,
-        uint32 catcherChainId
-    ) external {
+    function burnAndThrowPotato(uint256 potatoId, uint32 catcherChainId) external {
         // The potato cannot have exploded
         if (potatoes[potatoId] == PotatoStatus.Exploded) {
             revert PotatoAlreadyExploded();
@@ -75,10 +69,7 @@ contract HotPotato is IHotPotato, ERC721, Ownable {
         bytes32[] calldata proof
     ) external {
         // The message sender must be a whitelisted player
-        if (
-            message.sender != players[throwerChainId] ||
-            message.sender == address(0)
-        ) {
+        if (message.sender != players[throwerChainId] || message.sender == address(0)) {
             revert SenderIsNotPlayer();
         }
         // The potato must not have been played
@@ -92,15 +83,8 @@ contract HotPotato is IHotPotato, ERC721, Ownable {
         }
 
         // Validate message inclusion in senderChainId
-        if (
-            !L2_MESSAGE_VERIFICATION.proveL2MessageInclusionShared(
-                throwerChainId,
-                batchNumber,
-                index,
-                message,
-                proof
-            )
-        ) {
+        if (!L2_MESSAGE_VERIFICATION.proveL2MessageInclusionShared(throwerChainId, batchNumber, index, message, proof))
+        {
             revert InvalidInteropProof();
         }
 
@@ -108,9 +92,7 @@ contract HotPotato is IHotPotato, ERC721, Ownable {
         _mint(msg.sender, potatoId);
 
         // Timebomb check against random trigger
-        uint256 trigger = uint256(
-            keccak256(abi.encode(potatoId, block.timestamp))
-        ) & ((1 << 128) - 1); // last 128 bits
+        uint256 trigger = uint256(keccak256(abi.encode(potatoId, block.timestamp))) & ((1 << 128) - 1); // last 128 bits
         if (potatoId.getTimebomb() < trigger) {
             // The potato has exploded and cannot be played again
             potatoes[potatoId] = PotatoStatus.Exploded;
