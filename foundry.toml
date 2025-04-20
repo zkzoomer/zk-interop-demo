@@ -5,6 +5,8 @@ libs = ["lib"]
 remappings=[
     "@openzeppelin/contracts=lib/openzeppelin-contracts/contracts",
     "era-contracts/contracts=lib/era-contracts/l1-contracts/contracts",
+    "forge-std=lib/forge-std/src",
+    "forge-zksync-std=lib/forge-zksync-std/src",
 ]
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
