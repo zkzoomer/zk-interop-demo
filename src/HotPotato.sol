@@ -7,13 +7,12 @@ import {
 } from "era-contracts/contracts/common/l2-helpers/L2ContractAddresses.sol";
 import {L2Message} from "era-contracts/contracts/common/Messaging.sol";
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IHotPotato} from "./IHotPotato.sol";
 import {PotatoLib} from "./PotatoLib.sol";
 
 /// @title HotPotato
 /// @notice A simple interop proof of concept for ZK Chains
-contract HotPotato is IHotPotato, ERC721, Ownable {
+contract HotPotato is IHotPotato, ERC721 {
     using PotatoLib for uint256;
 
     /// @notice The initial timebomb for a potato
@@ -30,7 +29,7 @@ contract HotPotato is IHotPotato, ERC721, Ownable {
     /// @notice Mapping from potato ID to its status
     mapping(uint256 potatoId => PotatoStatus status) public potatoes;
 
-    constructor() ERC721("HotPotato", "HPT") Ownable(msg.sender) {}
+    constructor() ERC721("HotPotato", "HPT") {}
 
     /// @inheritdoc IHotPotato
     function mintPotato() external returns (uint256 potatoId) {
