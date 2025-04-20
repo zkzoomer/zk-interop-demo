@@ -9,4 +9,8 @@ remappings=[
     "forge-zksync-std=lib/forge-zksync-std/src",
 ]
 
+[rpc_endpoints]
+l2a = "http://localhost:3050"
+l2b = "http://localhost:3150"
+
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
