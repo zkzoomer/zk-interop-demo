@@ -33,11 +33,6 @@ contract HotPotato is IHotPotato, ERC721, Ownable {
     constructor() ERC721("HotPotato", "HPT") Ownable(msg.sender) {}
 
     /// @inheritdoc IHotPotato
-    function setPlayer(uint256 chainId, address player) external onlyOwner {
-        players[chainId] = player;
-    }
-
-    /// @inheritdoc IHotPotato
     function mintPotato() external returns (uint256 potatoId) {
         potatoId = PotatoLib.getPotatoId(block.chainid, ++potatoCount, block.chainid, 0, initialTimebomb);
         _mint(msg.sender, potatoId);
@@ -68,8 +63,9 @@ contract HotPotato is IHotPotato, ERC721, Ownable {
         L2Message calldata message,
         bytes32[] calldata proof
     ) external {
-        // The message sender must be a whitelisted player
-        if (message.sender != players[throwerChainId] || message.sender == address(0)) {
+        // The message sender must be a `HotPotato` entity in a different ZK Chain
+        // Since we deploy via CREATE2, this means the sender address must match that of this contract
+        if (message.sender != address(this)) {
             revert SenderIsNotPlayer();
         }
         // The potato must not have been played

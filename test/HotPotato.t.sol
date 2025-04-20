@@ -15,20 +15,8 @@ contract HotPotatoTest is Test {
 
     HotPotato hotPotato;
 
-    modifier validPlayer(uint256 throwerChainId, address throwerAddress) {
-        vm.assume(throwerChainId > 0);
-        vm.assume(throwerAddress != address(0));
-        hotPotato.setPlayer(throwerChainId, throwerAddress);
-        _;
-    }
-
     function setUp() public {
         hotPotato = new HotPotato();
-    }
-
-    function test_setPlayer(uint256 chainId, address player) public {
-        hotPotato.setPlayer(chainId, player);
-        assertEq(hotPotato.players(chainId), player);
     }
 
     function test_mintPotato() public {
@@ -80,6 +68,7 @@ contract HotPotatoTest is Test {
         uint256 potatoId,
         bytes32[] calldata proof
     ) public {
+        vm.assume(throwerAddress != address(hotPotato));
         // Call reverts as the sender is not whitelisted
         vm.expectRevert(IHotPotato.SenderIsNotPlayer.selector);
         hotPotato.catchAndMintPotato(
@@ -91,17 +80,16 @@ contract HotPotatoTest is Test {
         uint256 throwerChainId,
         uint256 batchNumber,
         uint256 index,
-        address throwerAddress,
         uint256 potatoId,
         bytes32[] calldata proof
-    ) public validPlayer(throwerChainId, throwerAddress) {
+    ) public {
         // Set the potato status to Caught
         bytes32 slot = keccak256(abi.encode(potatoId, 8)); // 8 is the slot of the potatoes mapping
         vm.store(address(hotPotato), slot, bytes32(uint256(1)));
         // Call reverts as the potato was marked as played
         vm.expectRevert(IHotPotato.PotatoWasPlayed.selector);
         hotPotato.catchAndMintPotato(
-            throwerChainId, batchNumber, index, L2Message(uint16(0), throwerAddress, abi.encode(potatoId)), proof
+            throwerChainId, batchNumber, index, L2Message(uint16(0), address(hotPotato), abi.encode(potatoId)), proof
         );
     }
 
@@ -109,14 +97,13 @@ contract HotPotatoTest is Test {
         uint256 throwerChainId,
         uint256 batchNumber,
         uint256 index,
-        address throwerAddress,
         uint256 potatoId,
         bytes32[] calldata proof
-    ) public validPlayer(throwerChainId, throwerAddress) {
+    ) public {
         // Call reverts as the potato was sent to a different chain
         vm.expectRevert(IHotPotato.InvalidCatcher.selector);
         hotPotato.catchAndMintPotato(
-            throwerChainId, batchNumber, index, L2Message(uint16(0), throwerAddress, abi.encode(potatoId)), proof
+            throwerChainId, batchNumber, index, L2Message(uint16(0), address(hotPotato), abi.encode(potatoId)), proof
         );
     }
 
@@ -124,19 +111,23 @@ contract HotPotatoTest is Test {
         uint256 throwerChainId,
         uint256 batchNumber,
         uint256 index,
-        address throwerAddress,
         uint256 potatoId,
         bytes32[] calldata proof
-    ) public validPlayer(throwerChainId, throwerAddress) {
+    ) public {
         potatoId = potatoId.setReceiverChainId(uint32(block.chainid));
         // Mock the message inclusion proof to be invalid
         mockMessageInclusion(
-            throwerChainId, batchNumber, index, L2Message(uint16(0), throwerAddress, abi.encode(potatoId)), proof, false
+            throwerChainId,
+            batchNumber,
+            index,
+            L2Message(uint16(0), address(hotPotato), abi.encode(potatoId)),
+            proof,
+            false
         );
         // Call reverts as the proof is invalid
         vm.expectRevert(IHotPotato.InvalidInteropProof.selector);
         hotPotato.catchAndMintPotato(
-            throwerChainId, batchNumber, index, L2Message(uint16(0), throwerAddress, abi.encode(potatoId)), proof
+            throwerChainId, batchNumber, index, L2Message(uint16(0), address(hotPotato), abi.encode(potatoId)), proof
         );
     }
 
@@ -144,14 +135,18 @@ contract HotPotatoTest is Test {
         uint256 throwerChainId,
         uint256 batchNumber,
         uint256 index,
-        address throwerAddress,
         uint256 potatoId,
         bytes32[] calldata proof
-    ) public validPlayer(throwerChainId, throwerAddress) {
+    ) public {
         potatoId = potatoId.setReceiverChainId(uint32(block.chainid));
         // Mock the message inclusion proof to be valid
         mockMessageInclusion(
-            throwerChainId, batchNumber, index, L2Message(uint16(0), throwerAddress, abi.encode(potatoId)), proof, true
+            throwerChainId,
+            batchNumber,
+            index,
+            L2Message(uint16(0), address(hotPotato), abi.encode(potatoId)),
+            proof,
+            true
         );
 
         // Force trigger to flip to exploded
@@ -162,7 +157,7 @@ contract HotPotatoTest is Test {
         vm.expectEmit(true, true, true, true);
         emit IHotPotato.PotatoExploded(potatoId);
         hotPotato.catchAndMintPotato(
-            throwerChainId, batchNumber, index, L2Message(uint16(0), throwerAddress, abi.encode(potatoId)), proof
+            throwerChainId, batchNumber, index, L2Message(uint16(0), address(hotPotato), abi.encode(potatoId)), proof
         );
 
         // Potato is now exploded
@@ -176,14 +171,18 @@ contract HotPotatoTest is Test {
         uint256 throwerChainId,
         uint256 batchNumber,
         uint256 index,
-        address throwerAddress,
         uint256 potatoId,
         bytes32[] calldata proof
-    ) public validPlayer(throwerChainId, throwerAddress) {
+    ) public {
         potatoId = potatoId.setReceiverChainId(uint32(block.chainid));
         // Mock the message inclusion proof to be valid
         mockMessageInclusion(
-            throwerChainId, batchNumber, index, L2Message(uint16(0), throwerAddress, abi.encode(potatoId)), proof, true
+            throwerChainId,
+            batchNumber,
+            index,
+            L2Message(uint16(0), address(hotPotato), abi.encode(potatoId)),
+            proof,
+            true
         );
 
         // Force trigger to flip to caught
@@ -194,7 +193,7 @@ contract HotPotatoTest is Test {
         vm.expectEmit(true, true, true, true);
         emit IHotPotato.PotatoCaught(potatoId);
         hotPotato.catchAndMintPotato(
-            throwerChainId, batchNumber, index, L2Message(uint16(0), throwerAddress, abi.encode(potatoId)), proof
+            throwerChainId, batchNumber, index, L2Message(uint16(0), address(hotPotato), abi.encode(potatoId)), proof
         );
 
         // Potato is now caught

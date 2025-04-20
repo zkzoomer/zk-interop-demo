@@ -35,11 +35,6 @@ interface IHotPotato is IERC721 {
     /// @notice Thrown when the interop Merkle proof is invalid
     error InvalidInteropProof();
 
-    /// @notice Sets a player (whitelisted `HotPotato` contract) for a ZK chain
-    /// @param chainId The ZK Chain's chain ID
-    /// @param player The whitelisted `HotPotato` contract address
-    function setPlayer(uint256 chainId, address player) external;
-
     /// @notice Mints a new potato to the caller
     /// @return potatoId The ID of the minted potato
     function mintPotato() external returns (uint256);
