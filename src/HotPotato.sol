@@ -38,7 +38,7 @@ contract HotPotato is IHotPotato, ERC721 {
     }
 
     /// @inheritdoc IHotPotato
-    function burnAndThrowPotato(uint256 potatoId, uint32 catcherChainId) external {
+    function burnAndThrowPotato(uint256 potatoId, uint32 catcherChainId) external returns (uint256 newPotatoId) {
         // The potato cannot have exploded
         if (potatoes[potatoId] == PotatoStatus.Exploded) {
             revert PotatoAlreadyExploded();
@@ -46,12 +46,12 @@ contract HotPotato is IHotPotato, ERC721 {
         // Burn the potato token
         _burn(potatoId);
         // The Potato sent will have a different ID, as we update its recipient chain and decrease its timebomb
-        potatoId = potatoId.setReceiverChainId(catcherChainId);
+        newPotatoId = potatoId.setReceiverChainId(catcherChainId);
         uint256 newTimebomb = (potatoId.getTimebomb() * timebombDecrease) / BPS;
-        potatoId = potatoId.setTimebomb(uint128(newTimebomb));
+        newPotatoId = newPotatoId.setTimebomb(uint128(newTimebomb));
         // Send the potato to the recipient chain
-        L2_TO_L1_MESSENGER_SYSTEM_CONTRACT.sendToL1(abi.encode(potatoId));
-        emit PotatoThrown(potatoId, catcherChainId);
+        L2_TO_L1_MESSENGER_SYSTEM_CONTRACT.sendToL1(abi.encode(newPotatoId));
+        emit PotatoThrown(newPotatoId, catcherChainId);
     }
 
     /// @inheritdoc IHotPotato

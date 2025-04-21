@@ -42,7 +42,8 @@ interface IHotPotato is IERC721 {
     /// @notice Burns a potato and throws it to a catcher ZK Chain
     /// @param potatoId The ID of the potato to burn
     /// @param catcherChainId The chain ID of the catcher ZK Chain
-    function burnAndThrowPotato(uint256 potatoId, uint32 catcherChainId) external;
+    /// @return newPotatoId The ID of the potato that was thrown
+    function burnAndThrowPotato(uint256 potatoId, uint32 catcherChainId) external returns (uint256);
 
     /// @notice Catches a potato by validating the interop message, and mints it to the caller
     /// @param throwerChainId The chain ID of the thrower ZK Chain
