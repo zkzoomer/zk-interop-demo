@@ -1,5 +1,45 @@
 # zkSync v29 Interop Proof of Concept
 
+# Deploy contracts
+
+L2-A (chain ID: 271):
+```
+forge script script/Scripts.s.sol:Deploy --zksync --rpc-url l2a --private-key=f12e28c0eb1ef4ff90478f6805b68d63737b7f33abfa091601140805da450d93 --broadcast
+```
+
+L2-B (chain ID: 260):
+```
+forge script script/Scripts.s.sol:Deploy  --zksync --rpc-url l2b --private-key=f12e28c0eb1ef4ff90478f6805b68d63737b7f33abfa091601140805da450d93 --broadcast
+```
+
+Which should deploy both contracts on different chains at the address `0x9E2d58E626e29641Cc5748007637Cc07D574228E`.
+
+# Mint a Potato
+
+On L2-A
+```
+forge script script/Scripts.s.sol:Mint --zksync --rpc-url l2a --private-key=f12e28c0eb1ef4ff90478f6805b68d63737b7f33abfa091601140805da450d93 --broadcast
+```
+
+On L2-B
+```
+forge script script/Scripts.s.sol:Mint --zksync --rpc-url l2b --private-key=f12e28c0eb1ef4ff90478f6805b68d63737b7f33abfa091601140805da450d93 --broadcast
+```
+
+# Throw a Potato
+
+From L2-A to L2-B
+```
+forge script script/Scripts.s.sol:Throw --zksync --sig "run(uint256,uint32)" [potatoId] 260 --rpc-url l2a --private-key=f12e28c0eb1ef4ff90478f6805b68d63737b7f33abfa091601140805da450d93 --broadcast
+```
+
+From L2-B to L2-A
+```
+forge script script/Scripts.s.sol:Throw --zksync --sig "run(uint256,uint32)" [potatoId] 271 --rpc-url l2b --private-key=f12e28c0eb1ef4ff90478f6805b68d63737b7f33abfa091601140805da450d93 --broadcast
+```
+
+You must record the resulting transaction hash to later fetch the necessary interop Merkle proofs to catch the potato on the destination chain.
+
 <!-- ## Foundry
 
 **Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
