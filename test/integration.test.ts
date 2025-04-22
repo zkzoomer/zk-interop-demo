@@ -51,8 +51,12 @@ describe('Integration', () => {
         });
         const receipt = await tx.wait();
 
-        // Get the NFT Transfer event (second log, index 1)
-        const transferLog = receipt.logs[1];
+        // Filter for the Transfer event from our HotPotato contract specifically
+        const transferLog = receipt.logs.find(
+            log => log.topics[0] === hotPotatoA.interface.getEvent('Transfer')?.topicHash &&
+                log.address.toLowerCase() === HOT_POTATO_ADDRESS.toLowerCase()
+        );
+        if (!transferLog) throw new Error('Transfer event not found');
         potatoId = transferLog.topics[3]; // Fourth topic contains the potato ID
         console.log('Minted potato ID:', potatoId);
     });
@@ -66,12 +70,16 @@ describe('Integration', () => {
         });
         const receipt = await tx.wait();
         txHash = tx.hash;
-
-        // Get the PotatoThrown event (sixth log, index 5)
-        const potatoThrownLog = receipt.logs[5];
-        thrownPotatoId = potatoThrownLog.topics[1]; // Second topic contains the thrown potato ID
-        console.log('Thrown potato ID:', thrownPotatoId);
         console.log('Tx hash:', txHash);
+
+        // Filter for the PotatoThrown event from our HotPotato contract specifically
+        const transferLog = receipt.logs.find(
+            log => log.topics[0] === hotPotatoA.interface.getEvent('PotatoThrown')?.topicHash &&
+                log.address.toLowerCase() === HOT_POTATO_ADDRESS.toLowerCase()
+        );
+        if (!transferLog) throw new Error('PotatoThrown event not found');
+        thrownPotatoId = transferLog.topics[1]; // Second topic contains the thrown potato ID
+        console.log('Thrown potato ID:', thrownPotatoId);
     });
 
     it('should catch and mint a potato', async () => {
