@@ -1,7 +1,10 @@
 .vscode/
+node_modules/
+broadcast/
 
 # Compiler files
 cache/
+cache-zk/
 out/
 zkout/
 
