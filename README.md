@@ -50,6 +50,8 @@ zkstack server --ignore-prerequisites --chain second &> ./second.log &
 > [!NOTE]
 > You may need to run the above commands twice if you encounter some issues.
 
+This will start three local networks: `gateway` (which will act as the settlement layer), `era` and `second`. Using interop, `era` (L2-A) and `second` (L2-B) will be able to communicate with each other.
+
 ### Deploying the contracts
 
 We will deploy the same contract on both networks: L2-A and L2-B.
