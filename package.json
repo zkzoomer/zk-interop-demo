@@ -7,16 +7,10 @@
     "test": "jest --verbose --testTimeout 150000"
   },
   "devDependencies": {
-    "@matterlabs/hardhat-zksync-deploy": "^1.5.0",
-    "@matterlabs/hardhat-zksync-solc": "^1.2.4",
-    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
-    "@openzeppelin/contracts": "^4.8.0",
     "@types/jest": "^29.0.3",
     "ethers": "^6.13.5",
-    "hardhat": "=2.22.2",
     "jest": "^29.0.3",
     "ts-jest": "^29.0.1",
-    "ts-node": "^10.1.0",
     "typescript": "^4.3.5",
     "zksync-ethers-interop-support": "git+https://github.com/zksync-sdk/zksync-ethers.git#c4819436678c7002e2c213e99e9188d8e969d5b1"
   }
