@@ -57,9 +57,11 @@ This will start three local networks: `gateway` (which will act as the settlemen
 We will deploy the same contract on both networks: L2-A and L2-B.
 
 ```
-forge script script/Deploy.s.sol:Deploy -r l2a --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
-forge script script/Deploy.s.sol:Deploy -r l2b --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+forge script script/Deploy.s.sol:Deploy --rpc-url l2a --zksync --broadcast --private-key 0xf12e28c0eb1ef4ff90478f6805b68d63737b7f33abfa091601140805da450d93
+forge script script/Deploy.s.sol:Deploy --rpc-url l2b --zksync --broadcast --private-key 0xf12e28c0eb1ef4ff90478f6805b68d63737b7f33abfa091601140805da450d93
 ```
+
+Which should deploy the contract on both networks at the same address: `0x9E2d58E626e29641Cc5748007637Cc07D574228E`.
 
 ### Running the integration tests
 
