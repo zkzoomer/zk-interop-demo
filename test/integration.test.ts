@@ -1,5 +1,5 @@
 import * as zksync from 'zksync-ethers-interop-support';
-import * as ethers from 'ethers';
+import 'ethers';
 
 // Import the HotPotato ABI
 import HotPotatoABI from '../zkout/HotPotato.sol/HotPotato.json';
