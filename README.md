@@ -70,6 +70,8 @@ yarn install
 yarn test
 ```
 
+> [!NOTE]
+> Tests are flaky and may fail. Run them multiple times if they fail.
 
 
 <!-- ## Foundry
