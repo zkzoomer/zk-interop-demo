@@ -2211,6 +2211,6 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-"zksync-ethers-interop-support@git+https://github.com/zksync-sdk/zksync-ethers.git#c4819436678c7002e2c213e99e9188d8e969d5b1":
+"zksync-ethers-interop-support@git+https://github.com/zksync-sdk/zksync-ethers.git#kl/interop-ethers-support":
   version "6.15.2"
-  resolved "git+https://github.com/zksync-sdk/zksync-ethers.git#c4819436678c7002e2c213e99e9188d8e969d5b1"
+  resolved "git+https://github.com/zksync-sdk/zksync-ethers.git#0e746cc6dc0788c4763c7e208fb8510fc87e8bb6"
