@@ -956,9 +956,9 @@ ejs@^3.1.10:
     jake "^10.8.5"
 
 electron-to-chromium@^1.5.73:
-  version "1.5.140"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.140.tgz#91d9279fe72963f22c5784cc7f3461b5fed34786"
-  integrity sha512-o82Rj+ONp4Ip7Cl1r7lrqx/pXhbp/lh9DpKcMNscFJdh8ebyRofnc7Sh01B4jx403RI0oqTBvlZ7OBIZLMr2+Q==
+  version "1.5.141"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.141.tgz#11776289d95385ca26d8cf95f31692ee58ee3a06"
+  integrity sha512-qS+qH9oqVYc1ooubTiB9l904WVyM6qNYxtOEEGReoZXw3xlqeYdFr5GclNzbkAufWgwWLEPoDi3d9MoRwwIjGw==
 
 emittery@^0.13.1:
   version "0.13.1"
@@ -2211,6 +2211,6 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-"zksync-ethers-interop-support@git+https://github.com/zksync-sdk/zksync-ethers.git#kl/interop-ethers-support":
+"zksync-ethers-interop-support@git+https://github.com/zksync-sdk/zksync-ethers.git#kl/interop-ethers-support-real":
   version "6.15.2"
-  resolved "git+https://github.com/zksync-sdk/zksync-ethers.git#0e746cc6dc0788c4763c7e208fb8510fc87e8bb6"
+  resolved "git+https://github.com/zksync-sdk/zksync-ethers.git#cffaa52fb4e11a26e8b0e7550cc92be73bfcf1f1"
