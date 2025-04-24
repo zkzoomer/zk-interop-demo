@@ -94,7 +94,7 @@ describe('Integration', () => {
             data: hotPotatoA.interface.encodeFunctionData('mintPotato'),
         });
         await fillerTx.wait();
-        await delay(10000);
+        await delay(20000);
     });
 
     it('should catch and mint a potato', async () => {
@@ -123,8 +123,20 @@ describe('Integration', () => {
                 params.proof
             ]),
         });
+        const receipt = await tx.wait();
         txHash = tx.hash;
         console.log('Tx hash:', txHash);
+
+        const caughtLog = receipt.logs.find(
+            log => log.topics[0] === hotPotatoA.interface.getEvent('PotatoCaught')?.topicHash &&
+                log.address.toLowerCase() === HOT_POTATO_ADDRESS.toLowerCase()
+        );
+        if (caughtLog) console.log('Potato caught');
+        const explodedLog = receipt.logs.find(
+            log => log.topics[0] === hotPotatoA.interface.getEvent('PotatoExploded')?.topicHash &&
+                log.address.toLowerCase() === HOT_POTATO_ADDRESS.toLowerCase()
+        );
+        if (explodedLog) console.log('Potato exploded');
     });
 
     function delay(ms: number) {
