@@ -23,6 +23,11 @@ As of writing, interop is not yet live on zkSync, meaning you will have to spin 
 git clone https://github.com/matter-labs/zksync-era --recurse-submodules
 cd zksync-era
 git checkout kl/reduced-interop-support
+git submodule update
+
+# You will also need to install `zkstack` from source
+# ensure `.cargo/bin` is included into your `PATH`
+cargo install --path zkstack_cli/crates/zkstack --features gateway --force --locked
 ```
 
 Then, spin up the local networks:
