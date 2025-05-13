@@ -26,8 +26,8 @@ git checkout kl/reduced-interop-support
 git submodule update
 
 # You will also need to install `zkstack` from source
-# ensure `.cargo/bin` is included into your `PATH`
-cargo install --path zkstack_cli/crates/zkstack --features gateway --force --locked
+./zkstack_cli/zkstackup/install -g --path ./zkstack_cli/zkstackup/zkstackup || true
+env "PATH=$PATH" zkstackup -g --local
 ```
 
 Then, spin up the local networks:
@@ -36,19 +36,22 @@ Then, spin up the local networks:
 zkstack dev clean containers && zkstack up -o false
 zkstack dev contracts
 
+zkstack ecosystem init --dev --observability=false --update-submodules false
 zkstack dev generate-genesis
-
+rm -rf ./chains/era/configs/*
+rm -rf ./chains/second/configs/*
+rm -rf ./chains/gateway/configs/*
+cat ./etc/env/file_based/genesis.yaml
 zkstack ecosystem init --dev --observability=false --update-submodules false
 
-zkstack chain convert-to-gateway --chain gateway --ignore-prerequisites
+zkstack chain gateway convert-to-gateway --chain gateway --ignore-prerequisites
 zkstack server --ignore-prerequisites --chain gateway &> ./gateway.log & 
-
 zkstack server wait --ignore-prerequisites --verbose --chain gateway
-zkstack chain migrate-to-gateway --chain era --gateway-chain-name gateway
-zkstack chain migrate-to-gateway --chain second --gateway-chain-name gateway
+
+zkstack chain gateway migrate-to-gateway --chain era --gateway-chain-name gateway
+zkstack chain gateway migrate-to-gateway --chain second --gateway-chain-name gateway
 
 zkstack server --ignore-prerequisites --chain era &> ./rollup.log &
-
 zkstack server --ignore-prerequisites --chain second &> ./second.log &
 ```
 
